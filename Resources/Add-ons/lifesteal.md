@@ -13,6 +13,31 @@ Once installed, your players will loose one of their heart whenever killed by ot
 The `/revive <player` command can be used by admins to revive any eliminated player. Eliminated players would be able to use `/spectate` to spectate their killers.
 Players can also use `/withdraw <Player> <Hearts>` command to donate their hearts to other players.
 
+## Setup Steps
+
+- Download Placeholderapi and extension `Player`
+- Make a script for deducting hearts with `playerKillPlayer` event
+- Make a public `/withdraw` command
+- Make a private `/revive` command
+- Make a public `/spectate` command
+- Test, and then test as a player.
+
+## Setup: Make a script for deducting hearts with `playerKillPlayer` event
+
+In the Minecraft Server's `~/plugins/CMI` directory is a file called `eventCommands.yml`, open this file up with for example Sublime Text 3 on macOS or NotePad++ on Windows.
+
+Search for the event `playerKillPlayer` event in the file, and under the commands, at this code:
+
+playerKillPlayer:\
+&nbsp;&nbsp; Enabled: true\
+&nbsp;&nbsp; Commands:
+  ```
+  - asConsole! attribute [playerName] minecraft:generic.max_health base set %cmi_equation_{player_max_health}-2%
+  - asConsole! attribute [sourceName] minecraft:generic.max_health base set %cmi_equation_{player_max_health}+2%
+  - check:%cmi_equation_{player_max_health}-2%==0! cmi usermeta [playerName] add dead true
+  - check:%cmi_equation_{player_max_health}-2%==0! cmi usermeta [playerName] add killer [sourceName]
+  - check:%cmi_equation_{player_max_health}-2%==0! cmi gm [playerName] spectator
+  ```
 ## Customizing
 
 You can of course customize all the options according to your liking, this is done mainly in *eventCommands.yml*. You can also edit the custom commands with `/cmi aliaseditor`, then pick
