@@ -38,6 +38,8 @@ the code from `playerKillPlayer` event to `playerDeath` event.
 - Download Placeholderapi and download extension `Player`
 - Make a listener for deducting hearts with `playerKillPlayer` event
 - Make a listener for `JoinServer` event
+- Make a script for `quitServer` event
+- Make a private `/_kickeliminated` command
 - Make a public `/withdraw` command
 - Make a private `/revive` command
 - Make a public `/spectate` command
@@ -64,6 +66,7 @@ playerKillPlayer:\
   - asConsole! attribute [sourceName] minecraft:generic.max_health base set %cmi_equation_{player_max_health}+2%
   - check:%cmi_equation_{player_max_health}-2%<=0! asConsole! cmi usermeta [playerName] add dead true
   - check:%cmi_equation_{player_max_health}-2%<=0! asConsole! cmi usermeta [playerName] add killer [sourceName]
+  - check:%cmi_equation_{player_max_health}-2%<=0! asConsole! cmi usermeta [sourceName] add eliminated[playerName] true
   - check:%cmi_equation_{player_max_health}-2%<=0! asConsole! cmi usermeta [playerName] add killerhp [sourceMaxHp]
   - check:%cmi_equation_{player_max_health}-2%<=0! asConsole! cmi gm [playerName] spectator
   - check:%cmi_equation_{player_max_health}-2%<=0! broadcast! &9[playerDisplayName] &cwas eliminated by &b[sourceDisplayName]&7[&c%cmi_equation_{cmi_user_meta_killerhp}/2% ❤&7]
@@ -85,12 +88,25 @@ joinServer:\
   ```
 This script will basically check if the eliminated Player's killer is online and whether to allow them to join server. If you want to let them join anyway, then you can remove the first line.
 
-## Setup: `/withdraw` command
+## Make a script for `quitServer` event
+
+In the Minecraft Server's `~/plugins/CMI` directory, there is a file called `eventCommands.yml`, open this file up with for example Sublime Text 3 on macOS or NotePad++ on Windows.
+
+Under quitServer event, add these commands:
+  ```
+  - allPlayers! _kickeliminated [allPlayers] [playerName]
+  ```
+This will run our custom alias `_kickeliminated` which we will be creating in a minute.
+
+## Setup: Add the Private and Public commands
 
 In the Minecraft Server's `~/plugins/CMI/CustomAlias` directory, there is a file called `eventCommands.yml`, open this file up with for example Sublime Text 3 on macOS or NotePad++ on Windows.
 
 At the very bottom add this code:
 ```
+  _kickeliminated:
+    Cmds:
+    - 'ptarget:$1! check:%cmi_user_meta_killer%==$2! cmi kick $1 &cYour killer has went offline so \nyou have been disconnected. -s'
   withdraw:
     Cmds:
     - statement:success! check:$2!=null! check:$1!=null! ifonline:$1
