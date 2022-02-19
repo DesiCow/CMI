@@ -24,7 +24,7 @@ Make sure it's clear this is about the alt detection add-on of course.
 
 ## Setup Steps
 
-- Install PAPI and it's expansion
+- Install PAPI and it's expansions
 - Install Luckperms
 - Install CMI
 - Utilise `firstJoinServer` CMI event for detection.
@@ -34,4 +34,7 @@ Make sure it's clear this is about the alt detection add-on of course.
 In the Minecraft Server's `~/plugins` directory, upload the PAPI plugin jar file and restart your server. The plugin should generate it's files.
 
 > Next step, i.e. installing `player` expansion. 
-You can do it ingame with command `/papi ecloud download Player` or you can 
+You can do it ingame with command `/papi ecloud download Player` or you can manually download it from [here](https://api.extendedclip.com/expansions/player/)
+
+> Next step, i.e. installing `Luckperms` expansion.
+You can do it ingame with command `/papi ecloud download Luckperms` or you can manually download it from [here](https://api.extendedclip.com/expansions/luckperms/)
